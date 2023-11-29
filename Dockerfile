@@ -2,7 +2,7 @@ FROM node:16.20.0-alpine3.17 AS ui_development
 
 ARG aspire_version="Non-versioned"
 ENV ASPIRE_VERSION=$aspire_version
-RUN echo "export PATH=${ASPIRE_VERSION}:${PATH}"  >> ~/.bashrc
+RUN echo "export ASPIRE_VERSION=${ASPIRE_VERSION}"  >> ~/.bashrc
 
 WORKDIR /usr/src/app
 COPY gui_aspire ./
