@@ -1,4 +1,8 @@
 FROM node:16.20.0-alpine3.17 AS ui_development
+
+ARG aspire_version="Non-versioned"
+ENV ASPIRE_VERSION=$pipeline_version
+
 WORKDIR /usr/src/app
 COPY gui_aspire ./
 RUN npm install
@@ -14,10 +18,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 ARG QUARTO_VERSION="1.2.475"
-RUN curl -o quarto-linux-amd64.deb -L https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb
-RUN gdebi --non-interactive quarto-linux-amd64.deb
-RUN rm quarto-linux-amd64.deb
-RUN apt remove -y curl gdebi-core
+RUN curl -o quarto-linux-amd64.deb -L https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb \
+    && gdebi --non-interactive quarto-linux-amd64.deb \
+    && rm quarto-linux-amd64.deb \
+    && apt remove -y curl gdebi-core
 
 USER $MAMBA_USER
 
@@ -43,5 +47,3 @@ EXPOSE 3000
 
 WORKDIR /home/$MAMBA_USER
 ENTRYPOINT ["micromamba","run","-n","aspire","/opt/entrypoint.sh"]
-
-
