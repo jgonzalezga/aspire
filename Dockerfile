@@ -1,9 +1,4 @@
 FROM node:16.20.0-alpine3.17 AS ui_development
-
-ARG aspire_version="Non-versioned"
-ENV ASPIRE_VERSION=$aspire_version
-RUN echo $aspire_version > /etc/aspire.version
-
 WORKDIR /usr/src/app
 COPY gui_aspire ./
 RUN npm install
@@ -12,8 +7,10 @@ RUN npm run build
 FROM mambaorg/micromamba:1.4.8-bullseye-slim
 
 USER root
+ARG aspire_version="Non-versioned"
+ENV ASPIRE_VERSION=$aspire_version
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN echo $aspire_version > /etc/aspire.version && apt-get update && apt-get install -y --no-install-recommends \
     curl \
     gdebi-core \
     && rm -rf /var/lib/apt/lists/*
