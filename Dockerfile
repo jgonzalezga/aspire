@@ -9,9 +9,8 @@ FROM mambaorg/micromamba:1.4.8-bullseye-slim
 USER root
 ARG aspire_version="Non-versioned"
 ENV ASPIRE_VERSION=$aspire_version
-ENV ASPIRE_VERSION_OLD=$aspire_version
 
-RUN echo $aspire_version > /etc/aspire.version && apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     gdebi-core \
     && rm -rf /var/lib/apt/lists/*
